@@ -1,0 +1,31 @@
+@(petitionForm:Form[String])(implicit app:play.api.Application)
+
+
+@import play.api.i18n._
+
+@main(app.configuration.getString("application.name").get) {
+
+<div class="sign">
+    <form id="sign-form" action="@routes.Application.sign()" method="POST">
+
+        @petitionForm.forField("email"){ field =>
+        <label for="email">@Messages("email.label")</label>
+        <input id="email" type="text" name="@field.name" value="@field.value">
+            @field.error.map { error =>
+                <p class="error">
+                    @error
+                </p>
+            }
+        }
+        <button id="sign-button" type="submit">@Messages("sign.button.label")</button>
+    </form>
+</div>
+
+<div class="signers">
+    <ul>
+
+    </ul>
+</div>
+
+    
+}

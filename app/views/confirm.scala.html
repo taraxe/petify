@@ -1,0 +1,20 @@
+@(confirmationForm:Form[Model.Signer], code: String)(implicit app:play.api.Application)
+
+@import play.api.i18n._
+@import helper._
+
+@main(app.configuration.getString("application.name").get) {
+
+<div class="sign">
+    <form id="confirm-form" action="@routes.Application.doConfirm(code)" method="POST">
+    @inputText(confirmationForm("signer.email"), 'label -> Messages("email.label"))
+    @inputText(confirmationForm("signer.firstName"), 'label -> Messages("firstname.label"))
+    @inputText(confirmationForm("signer.lastName"), 'label -> Messages("lastname.label"))
+    @inputText(confirmationForm("signer.age"), 'label -> Messages("lastname.label"))
+    @inputText(confirmationForm("signer.city"), 'label -> Messages("lastname.label"))
+    <button id="sign-button" type="submit">@Messages("sign.button.label")</button>
+    </form>
+</div>
+
+    
+}

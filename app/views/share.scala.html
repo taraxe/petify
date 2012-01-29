@@ -1,0 +1,21 @@
+@(confirm:Boolean=false)(implicit app:play.api.Application)
+
+@import play.api.i18n._
+
+@main(app.configuration.getString("application.name").get) {
+
+<div class="sign">
+    @if(confirm) {
+        <p>@Messages("confirmation.message")</p>
+    } else {
+        <p>@Messages("confirmation.message")</p>
+    }
+    <span>@Messages("spread.label")</span>
+    <button>Facebook</button>
+    <button>Twitter</button>
+    <button>LinkedIn</button>
+    <button>Gmail</button>
+</div>
+
+    
+}
