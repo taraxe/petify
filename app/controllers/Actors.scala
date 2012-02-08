@@ -24,12 +24,12 @@ import akka.actor.{Props, ActorSystem, Actor}
 
    class SignatureWorker extends Actor {
 
-      var listeners = Seq.empty[PushEnumerator[Signer]]
+      var listeners = Seq.empty[PushEnumerator[String]]
 
       def receive = {
 
          case SignatureWorker.Listen() => {
-            lazy val channel: PushEnumerator[Signer] = Enumerator.imperative[Signer](
+            lazy val channel: PushEnumerator[String] = Enumerator.imperative[String](
                onComplete = self ! SignatureWorker.Quit(channel)
             )
             listeners = listeners :+ channel
@@ -44,14 +44,14 @@ import akka.actor.{Props, ActorSystem, Actor}
 
          case SignatureWorker.Signed(signer) => {
             Logger.info("New signature : " + signer.toString)
-            listeners.foreach(_.push(signer))
+            listeners.foreach(_.push(signer.toString))
          }
       }
    }
    object SignatureWorker {
       trait Event
       case class Listen() extends Event
-      case class Quit(channel:PushEnumerator[Signer]) extends Event
+      case class Quit(channel:PushEnumerator[String]) extends Event
       case class Signed(s:Signer) extends Event
       lazy val system = ActorSystem("system")
       lazy val ref = system.actorOf(Props[SignatureWorker], name= "myWorker")

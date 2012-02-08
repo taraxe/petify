@@ -1,9 +1,9 @@
 package models
 
 import play.api.libs.json._
-import play.api.libs.json.Json
 import com.mongodb.casbah.Imports._
 import db.db.Mongo
+import play.api.libs.json
 
 
 /**
@@ -17,8 +17,8 @@ import db.db.Mongo
 
    case class Signer(email:String, code:String, firstName:Option[String] = None, lastName:Option[String] = None , age:Option[Int] = None, city:Option[String] = None) {
       override def toString():String = {
-         Some(firstName,lastName).map{ u =>
-            u._1.map(f => f.head.toUpper + f.tail.toLowerCase) + " " + u._2.map(l => l.head.toUpper + ".")
+         Some(firstName,lastName,city).map{ u =>
+            u._1.map(f => f.head.toUpper + f.tail.toLowerCase) + " " + u._2.map(_.head.toUpper + ".")+ " "+ u._3.map(" "+_.head.toUpper)
          }.getOrElse("")
       }
    }

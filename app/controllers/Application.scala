@@ -35,6 +35,7 @@ object Application extends Controller {
 
    def stream = Action {
       AsyncResult {
+         //ask Sadek for POJO instead of string
          (SignatureWorker.ref ? (SignatureWorker.Listen(),5.seconds)).mapTo[Enumerator[String]].asPromise.map { chunks =>
             Ok.stream(chunks &> Comet(callback = "parent.signIt"))
          }
