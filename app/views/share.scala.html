@@ -1,8 +1,9 @@
-@(confirm:Boolean=false)(implicit app:play.api.Application)
+@(confirm:Boolean=false)(implicit app:play.api.Application, request: play.api.mvc.Request[Any])
 
 @import play.api.i18n._
 
 @main(app.configuration.getString("application.name").get) {
+
 
 <div class="sign">
     @if(confirm) {
@@ -10,12 +11,23 @@
     } else {
         <p>@Messages("confirmation.message")</p>
     }
-    <span>@Messages("spread.label")</span>
-    <button>Facebook</button>
-    <button>Twitter</button>
-    <button>LinkedIn</button>
-    <button>Gmail</button>
+    <p>@Messages("spread.message")</p>
+    <button class="facebook">Facebook</button>
+    <button class="twitter">Twitter</button>
+    <!--<button class="linkedin">LinkedIn</button>
+    <button class="gmail">Gmail</button>-->
 </div>
 
-    
+@signers()
+
+<div id="fb-root"></div>
+
+<script type="text/javascript">
+    var message = "@Messages("spread.social.message","http://"+request.host+request.uri)";
+</script>
+
+<script type="text/javascript" src="@routes.Assets.at("javascripts/social.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/share.js")"></script>
+
+
 }

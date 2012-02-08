@@ -5,12 +5,13 @@
 # Home page
 GET    /                           controllers.Application.index
 
-GET    /auth                       controllers.Twitter.authenticate()
 POST   /sign                       controllers.Application.sign()
 GET    /confirm                    controllers.Application.confirm(code)
 POST   /confirm                    controllers.Application.doConfirm(code)
 GET    /share                      controllers.Application.share()
+GET    /stream                     controllers.Application.stream()
 
+GET    /twitter/auth               controllers.social.Twitter.authenticate()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -14,10 +14,8 @@ import db.db.Mongo
  * To change this template use File | Settings | File Templates.
  */
 
-object Model {
-   
-   case class Signer(email:String, code:String, firstName:Option[String] = None, lastName:Option[String] = None , age:Option[Int] = None, city:Option[String] = None) {
 
+   case class Signer(email:String, code:String, firstName:Option[String] = None, lastName:Option[String] = None , age:Option[Int] = None, city:Option[String] = None) {
       override def toString():String = {
          Some(firstName,lastName).map{ u =>
             u._1.map(f => f.head.toUpper + f.tail.toLowerCase) + " " + u._2.map(l => l.head.toUpper + ".")
@@ -47,21 +45,18 @@ object Model {
             code <- r.getAs[String]("code")
          } yield(Signer(email, code))).orElse(None)
       }
+      implicit object SignerFormat extends Format[Signer] {
+         def reads(json: JsValue) = Signer(
+            (json \ "email").as[String],
+            (json \ "code").as[String],
+            (json \ "firstName").asOpt[String],
+            (json \ "lastName").asOpt[String],
+            (json \ "age").asOpt[Int],
+            (json \ "city").asOpt[String]
+         )
+         def writes(o: Signer):JsValue = JsObject(List(
+            "fullName" -> JsString(o.toString()),
+            "city" -> o.firstName.map(JsString(_)).getOrElse(JsNull)
+         ))
    }
-
-   implicit object SignerFormat extends Format[Signer] {
-      def reads(json: JsValue) = Signer(
-         (json \ "email").as[String],
-         (json \ "code").as[String],
-         (json \ "firstName").asOpt[String],
-         (json \ "lastName").asOpt[String],
-         (json \ "age").asOpt[Int],
-         (json \ "city").asOpt[String]
-      )
-      def writes(o: Signer):JsValue = JsObject(List(
-         "fullName" -> JsString(o.toString()),
-         "city" -> o.firstName.map(JsString(_)).getOrElse(JsNull)
-      ))
-   }
-
 }

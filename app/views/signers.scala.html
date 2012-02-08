@@ -1,0 +1,15 @@
+<iframe src="@routes.Application.stream" style="display:none"></iframe>
+
+<ul class="signers-container">
+
+</ul>
+
+<script type="text/javascript">
+    var signIt = function(msg) {
+        $('.signer-tmpl').tmpl(msg).appendTo('.signers-container');
+    }
+</script>
+
+<script type="text/x-jquery-tmpl" id="signer-tmpl">
+    <li class="signer">msg</li>
+</script>

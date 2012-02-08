@@ -8,7 +8,11 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0"
 
    val appDependencies = Seq(
-      "com.mongodb.casbah" % "casbah_2.9.0-1" % "2.1.5.0"
+      "com.mongodb.casbah" % "casbah_2.9.0-1" % "2.1.5.0",
+      "org.apache.commons" % "commons-email" % "1.2",
+      "javax.mail" % "mail" % "1.4.1",
+      "javax.activation" % "activation" % "1.1"
+
       // Add your project dependencies here,
    )
 

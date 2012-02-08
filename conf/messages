@@ -1,5 +1,6 @@
 sign.button.label=Signez la pétition
 confirmation.message=Merci d'avoir signé la pétition. Vous allez recevoir un email de confirmation.
 end.message=Merci encore pour votre soutien.
-spread.message=Joignez la cause et diffusez la pétition sur les réseaux sociaux.
+spread.message=Joignez la cause et diffusez la petition sur les réseaux sociaux.
+spread.social.message=Je viens de signer une petition qui va changer la donne ! {0}
 email.label=Email
