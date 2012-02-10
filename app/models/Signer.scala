@@ -87,7 +87,7 @@ import com.mongodb.casbah.Imports
          )
          def writes(o: Signer):JsValue = JsObject(List(
             "fullName" -> JsString(o.format),
-            "city" -> o.firstName.map(JsString(_)).getOrElse(JsNull)
+            "city" -> o.city.map(JsString(_)).getOrElse(JsNull)
          ))
    }
 }

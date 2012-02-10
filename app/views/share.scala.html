@@ -1,15 +1,23 @@
-@(alreadyDone:Boolean=false)(implicit app:play.api.Application, request: play.api.mvc.Request[Any])
+@(confirm:Boolean=false, alreadyDone:Boolean=false, end:Boolean = false)(implicit app:play.api.Application, request: play.api.mvc.Request[Any])
 
 @import play.api.i18n._
 
 @main(app.configuration.getString("application.name").get) {
 
-@if(!alreadyDone){
+@if(confirm){
 <div class="alert alert-info">
     <a class="close">×</a>
     @Messages("confirmation.message")
 </div>
-} else {
+}
+@if(end){
+<div class="alert alert-info">
+    <a class="close">×</a>
+    @Messages("thank.message")
+</div>
+}
+
+@if(alreadyDone){
 <div class="alert alert-error">
     <a class="close">×</a>
     @Messages("already.message")

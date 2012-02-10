@@ -7,11 +7,11 @@
 <script type="text/javascript">
     var signIt = function(msg) {
         console.log(msg);
-        $('#signer-tmpl').tmpl(msg).appendTo('.signers-container');
+        $('#signer-tmpl').tmpl(msg).prependTo('.signers-container');
     }
 </script>
 
 <iframe src="@routes.Application.stream" style="display:none"></iframe>
 <script type="text/x-jquery-tmpl" id="signer-tmpl">
-    <li class="signer">${msg}</li>
+    <li class="signer">${fullName}, ${city}</li>
 </script>

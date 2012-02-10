@@ -46,12 +46,12 @@ object Application extends Controller {
     )
   }
 
+   val cometEnumeratee = Comet(callback = "window.parent.signIt")(Comet.CometMessage[Signer](signer => {
+      Logger.debug("converting to json")
+      toJson(signer).toString
+   }))
+
    def stream = Action {
-		val cometEnumeratee = Comet(callback = "window.parent.signIt")(Comet.CometMessage[Signer](signer => {
-           Logger.debug("converting to json")
-           toJson(signer).toString
-        }))
-		
       AsyncResult {
 		implicit val timeout = Timeout(5 second)
          (SignatureWorker.ref ? Listen()).mapTo[Enumerator[Signer]].asPromise.map {
@@ -69,10 +69,14 @@ object Application extends Controller {
                                   .right
                                   .map(s =>{
                                      //val confirmURL: String = "http://" + request.host + routes.Application.confirm(s).url
-                                     Ok(views.html.share())
+                                     Ok(views.html.share(confirm = true))
                                   })
                                   .fold(identity,identity)
                              }
+   def done() = Action { implicit request =>
+      import play.api.Play.current
+      Ok(views.html.share(end = true))
+   }
    
   def confirm(code: String) = Action { implicit request =>
      import play.api.Play.current
@@ -88,9 +92,9 @@ object Application extends Controller {
          signer => {
             //todo update the signer
             signer.update()
-            SignatureWorker.ref ! signer
+            SignatureWorker.ref ! Signed(signer)
             Logger.debug("New signature : " + signer.format)
-            Redirect(routes.Application.share())
+            Redirect(routes.Application.done())
          }
      )
   }

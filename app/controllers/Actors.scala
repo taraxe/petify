@@ -23,7 +23,7 @@ import play.libs.Akka
 
    class SignatureWorker extends Actor {
 	  import SignatureWorker._
-      var signers : Option[Pushee[Signer]] = None
+      var signers : List[Pushee[Signer]] = Nil
 
       def receive = {
          case Listen() => {
@@ -34,15 +34,22 @@ import play.libs.Akka
             Logger.info("New signers stream on")
             sender ! channel
          }
+         case Init(pushee) => {
+            signers = signers :+ pushee
+         }
 
          case Quit() => {
             Logger.info("Signature stream stopped ...")
-            signers = None
          }
 
          case Signed(signer) => {
-            Logger.info("New signature : " + signer.toString)
-            signers.map(_.push(signer))
+            Logger.info("New signature in actor : " + signer.toString)
+            Logger.info("size :  "+signers.size)
+
+            signers.foreach(_.push(signer))
+         }
+         case _ => {
+            Logger.info("error matching actor message")
          }
       }
    }

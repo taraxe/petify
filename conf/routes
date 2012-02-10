@@ -9,6 +9,7 @@ POST   /sign                       controllers.Application.sign()
 GET    /confirm                    controllers.Application.confirm(code)
 POST   /confirm                    controllers.Application.doConfirm(code)
 GET    /share                      controllers.Application.share()
+GET    /thanks                     controllers.Application.done()
 GET    /stream                     controllers.Application.stream()
 
 GET    /twitter/auth               controllers.social.Twitter.authenticate()
