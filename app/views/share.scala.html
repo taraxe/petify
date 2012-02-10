@@ -1,13 +1,20 @@
-@()(implicit app:play.api.Application, request: play.api.mvc.Request[Any])
+@(alreadyDone:Boolean=false)(implicit app:play.api.Application, request: play.api.mvc.Request[Any])
 
 @import play.api.i18n._
 
 @main(app.configuration.getString("application.name").get) {
 
+@if(!alreadyDone){
 <div class="alert alert-info">
     <a class="close">×</a>
     @Messages("confirmation.message")
 </div>
+} else {
+<div class="alert alert-error">
+    <a class="close">×</a>
+    @Messages("already.message")
+</div>
+}
 
 <div class="hero-unit">
     <h1>@Messages("sign.tagline")</h1>

@@ -1,16 +1,17 @@
 @import play.api.i18n._
 
-<iframe src="@routes.Application.stream" style="display:none"></iframe>
 <ul class="signers-container">
 
 </ul>
 
 <script type="text/javascript">
     var signIt = function(msg) {
-        $('.signer-tmpl').tmpl(msg).appendTo('.signers-container');
+        console.log(msg);
+        $('#signer-tmpl').tmpl(msg).appendTo('.signers-container');
     }
 </script>
 
+<iframe src="@routes.Application.stream" style="display:none"></iframe>
 <script type="text/x-jquery-tmpl" id="signer-tmpl">
-    <li class="signer">msg</li>
+    <li class="signer">${msg}</li>
 </script>

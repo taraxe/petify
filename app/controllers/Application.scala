@@ -1,17 +1,27 @@
 package controllers
 
 import models._
-import actors._
+import play.api.mvc._
+
+import actors.SignatureWorker
 import actors.SignatureWorker._
+
 import play.api.data._
 import play.api.data.Forms._
-import play.api.mvc._
+
 import java.util.UUID
-import play.api.libs.Comet
 import play.Logger
+
 import play.api.libs.iteratee._
 import play.api.libs.concurrent._
+import play.api.libs.Comet
+
 import akka.util.duration._
+import akka.util.Timeout
+
+import play.api.libs.json._
+import play.api.libs.json.Json._
+import akka.pattern.ask
 
 object Application extends Controller {
   val TOKEN_KEY = "token"
@@ -37,10 +47,18 @@ object Application extends Controller {
   }
 
    def stream = Action {
+		val cometEnumeratee = Comet(callback = "window.parent.signIt")(Comet.CometMessage[Signer](signer => {
+           Logger.debug("converting to json")
+           toJson(signer).toString
+        }))
+		
       AsyncResult {
-         //ask Sadek for POJO instead of string
-         (SignatureWorker.ref ? (SignatureWorker.Listen(),5.seconds)).mapTo[Enumerator[String]].asPromise.map { chunks =>
-            Ok.stream(chunks &> Comet(callback = "parent.signIt"))
+		implicit val timeout = Timeout(5 second)
+         (SignatureWorker.ref ? Listen()).mapTo[Enumerator[Signer]].asPromise.map {
+			chunks => {
+               Logger.debug("un chunk")
+               Ok.stream(chunks &> cometEnumeratee)
+            }
          }
       }
    }

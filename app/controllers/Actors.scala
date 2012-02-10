@@ -1,59 +1,57 @@
 package actors
 
-import akka.actor.Actor
 import models.Signer
-import play.api.libs.iteratee.Enumerator
+
+import play.api._
+import play.api.libs.iteratee._
+import play.api.libs.iteratee.Enumerator.Pushee
 import play.Logger
-import akka.actor.ActorSystem._
-import akka.actor.Props._
+
 import akka.actor._
 import akka.actor.Actor._
-import play.api.libs.iteratee._
 import play.api.libs.concurrent._
-import akka.actor.{Props, ActorSystem, Actor}
-
+import play.api.Play.current
+import play.libs.Akka
 
 /**
  * Created by IntelliJ IDEA.
  * User: alabbe
  * Date: 08/02/12
  * Time: 01:26
- * To change this template use File | Settings | File Templates.
  */
 
 
    class SignatureWorker extends Actor {
-
-      var listeners = Seq.empty[PushEnumerator[String]]
+	  import SignatureWorker._
+      var signers : Option[Pushee[Signer]] = None
 
       def receive = {
-
-         case SignatureWorker.Listen() => {
-            lazy val channel: PushEnumerator[String] = Enumerator.imperative[String](
-               onComplete = self ! SignatureWorker.Quit(channel)
+         case Listen() => {
+            lazy val channel: Enumerator[Signer] = Enumerator.pushee(
+               	pushee => self ! Init(pushee),
+				onComplete = self ! Quit()
             )
-            listeners = listeners :+ channel
             Logger.info("New signers stream on")
             sender ! channel
          }
 
-         case SignatureWorker.Quit(channel) => {
+         case Quit() => {
             Logger.info("Signature stream stopped ...")
-            listeners = listeners.filterNot(_ == channel)
+            signers = None
          }
 
-         case SignatureWorker.Signed(signer) => {
+         case Signed(signer) => {
             Logger.info("New signature : " + signer.toString)
-            listeners.foreach(_.push(signer.toString))
+            signers.map(_.push(signer))
          }
       }
    }
    object SignatureWorker {
       trait Event
       case class Listen() extends Event
-      case class Quit(channel:PushEnumerator[String]) extends Event
-      case class Signed(s:Signer) extends Event
-      lazy val system = ActorSystem("system")
-      lazy val ref = system.actorOf(Props[SignatureWorker], name= "myWorker")
+      case class Quit() extends Event
+      case class Signed(s:Signer)
+	  case class Init(p:Pushee[Signer])
+      lazy val ref = Akka.system.actorOf(Props[SignatureWorker])
 
 }

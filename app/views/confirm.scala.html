@@ -14,11 +14,11 @@
             <fieldset>
                 <legend>@Messages("confirm.form")</legend>
                 <br/>
-                @inputText(confirmationForm("signer.email"), 'class->"disabled", 'disabled->"disabled" )(twitterBootstrapFieldHandler,lang)
-                @inputText(confirmationForm("signer.firstName"))(twitterBootstrapFieldHandler,lang)
-                @inputText(confirmationForm("signer.lastName"))(twitterBootstrapFieldHandler,lang)
-                @inputText(confirmationForm("signer.age"))(twitterBootstrapFieldHandler,lang)
-                @inputText(confirmationForm("signer.city"))(twitterBootstrapFieldHandler,lang)
+                @inputText(confirmationForm("signer.email"))(twitterBootstrapFieldConstructor,lang)
+                @inputText(confirmationForm("signer.firstName"))(twitterBootstrapFieldConstructor,lang)
+                @inputText(confirmationForm("signer.lastName"))(twitterBootstrapFieldConstructor,lang)
+                @inputText(confirmationForm("signer.age"))(twitterBootstrapFieldConstructor,lang)
+                @inputText(confirmationForm("signer.city"))(twitterBootstrapFieldConstructor,lang)
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">@Messages("sign.button.label")</button>

@@ -6,7 +6,8 @@ email.help=Un email de confirmation vous sera envoyé. Vos données resteront pr
 
 
 sign.tagline=Diffusez en masse
-confirmation.message=Merci d'avoir signé la pétition. Vous allez recevoir un email de confirmation.
+confirmation.message=Merci d avoir signé la pétition. Vous allez recevoir un email de confirmation.
+already.message=Vous avez déjà signé la pétition, merci pour l'enthousiasme.
 spread.message=Partager la petition sur les réseaux sociaux.
 spread.social.message=Je viens de signer une petition qui va changer la donne ! {0}
 

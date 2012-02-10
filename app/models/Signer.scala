@@ -18,9 +18,9 @@ import com.mongodb.casbah.Imports
 
 
    case class Signer(email:String, code:String, firstName:Option[String] = None, lastName:Option[String] = None , age:Option[Int] = None, city:Option[String] = None) {
-      def format():String = {
+      def format:String = {
          Some(firstName,lastName,city).map{ u =>
-            u._1.map(f => f.head.toUpper + f.tail.toLowerCase).get + " " + u._2.map(_.head.toUpper + ".").get+ " "+ u._3.map(c => c.head.toUpper+c.tail).getOrElse("")
+            u._1.map(f => f.head.toUpper + f.tail.toLowerCase).get + " " + u._2.map(_.head.toUpper + ".").get
          }.getOrElse("")
       }
 
@@ -86,7 +86,7 @@ import com.mongodb.casbah.Imports
             (json \ "city").asOpt[String]
          )
          def writes(o: Signer):JsValue = JsObject(List(
-            "fullName" -> JsString(o.toString()),
+            "fullName" -> JsString(o.format),
             "city" -> o.firstName.map(JsString(_)).getOrElse(JsNull)
          ))
    }
