@@ -1,6 +1,31 @@
+home.tagline=Signez en masse
+home.description=Imposons aux parlementaires français une réduction drastiques de leurs avantages en ces temps difficiles. Exprimez la voie du peuple et accomplissez un geste citoyen en signant cette pétition.
 sign.button.label=Signez la pétition
+cancel.button.label=Effacer
+email.help=Un email de confirmation vous sera envoyé. Vos données resteront privées.
+
+
+sign.tagline=Diffusez en masse
 confirmation.message=Merci d'avoir signé la pétition. Vous allez recevoir un email de confirmation.
-end.message=Merci encore pour votre soutien.
-spread.message=Joignez la cause et diffusez la petition sur les réseaux sociaux.
+spread.message=Partager la petition sur les réseaux sociaux.
 spread.social.message=Je viens de signer une petition qui va changer la donne ! {0}
+
+confirm.form=Finaliser votre signature :
 email.label=Email
+signer.email=Email :
+signer.firstName=Prénom :
+signer.lastName=Nom :
+signer.age=Age :
+signer.city=Ville :
+
+
+
+
+recent.signatures=Les derniers signataires :
+footer.text=Zenexity Hackday
+
+
+#Mail template
+mail.tagline=Merci pour votre signature.
+mail.description=Suivez le lien de confirmation.
+

@@ -20,7 +20,7 @@ class Mongo(tableName: String) {
 
    def insert(model: MongoDBObject) = db(tableName) += model
 
-   //def update(tableName: String, key: MongoDBObject, model: MongoDBObject) = db(tableName).findAndModify(key, model)
+   def update(key: MongoDBObject, model: MongoDBObject) = db(tableName).findAndModify(key, model)
 
    //def remove(tableName: String, key: MongoDBObject, model: MongoDBObject) = db(tableName).findAndRemove(key, model)
 

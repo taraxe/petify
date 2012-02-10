@@ -1,29 +1,26 @@
-@(confirm:Boolean=false)(implicit app:play.api.Application, request: play.api.mvc.Request[Any])
+@()(implicit app:play.api.Application, request: play.api.mvc.Request[Any])
 
 @import play.api.i18n._
 
 @main(app.configuration.getString("application.name").get) {
 
-
-<div class="sign">
-    @if(confirm) {
-        <p>@Messages("confirmation.message")</p>
-    } else {
-        <p>@Messages("confirmation.message")</p>
-    }
-    <p>@Messages("spread.message")</p>
-    <button class="facebook">Facebook</button>
-    <button class="twitter">Twitter</button>
-    <!--<button class="linkedin">LinkedIn</button>
-    <button class="gmail">Gmail</button>-->
+<div class="alert alert-info">
+    <a class="close">×</a>
+    @Messages("confirmation.message")
 </div>
 
-@signers()
-
+<div class="hero-unit">
+    <h1>@Messages("sign.tagline")</h1>
+    <p>@Messages("spread.message")</p>
+    <a class="facebook btn btn-large btn-primary">Facebook</a>
+    <a class="twitter btn btn-large btn-primary">Twitter</a>
+    <!--<button class="linkedin">LinkedIn</button>
+   <button class="gmail">Gmail</button>-->
+</div>
 <div id="fb-root"></div>
 
 <script type="text/javascript">
-    var message = "@Messages("spread.social.message","http://"+request.host+request.uri)";
+    var message = "@Messages("spread.social.message","http://"+request.host)";
 </script>
 
 <script type="text/javascript" src="@routes.Assets.at("javascripts/social.js")"></script>

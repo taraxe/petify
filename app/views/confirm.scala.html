@@ -1,19 +1,32 @@
-@(confirmationForm:Form[Signer], code: String)(implicit app:play.api.Application)
+@(confirmationForm:Form[Signer], code: String)(implicit app:play.api.Application, lang:play.api.i18n.Lang)
 
 @import play.api.i18n._
 @import helper._
+@import twitterBootstrap._
+
 
 @main(app.configuration.getString("application.name").get) {
 
-<div class="sign">
-    <form id="confirm-form" action="@routes.Application.doConfirm(code)" method="POST">
-    @inputText(confirmationForm("signer.email"), 'label -> Messages("email.label"))
-    @inputText(confirmationForm("signer.firstName"), 'label -> Messages("firstname.label"))
-    @inputText(confirmationForm("signer.lastName"), 'label -> Messages("lastname.label"))
-    @inputText(confirmationForm("signer.age"), 'label -> Messages("lastname.label"))
-    @inputText(confirmationForm("signer.city"), 'label -> Messages("lastname.label"))
-    <button id="sign-button" type="submit">@Messages("sign.button.label")</button>
-    </form>
+<div class="row">
+    <div class="span8 offset2"
+    <div class="sign">
+        <form id="confirm-form" action="@routes.Application.doConfirm(code)" method="POST">
+            <fieldset>
+                <legend>@Messages("confirm.form")</legend>
+                <br/>
+                @inputText(confirmationForm("signer.email"), 'class->"disabled", 'disabled->"disabled" )(twitterBootstrapFieldHandler,lang)
+                @inputText(confirmationForm("signer.firstName"))(twitterBootstrapFieldHandler,lang)
+                @inputText(confirmationForm("signer.lastName"))(twitterBootstrapFieldHandler,lang)
+                @inputText(confirmationForm("signer.age"))(twitterBootstrapFieldHandler,lang)
+                @inputText(confirmationForm("signer.city"))(twitterBootstrapFieldHandler,lang)
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">@Messages("sign.button.label")</button>
+                    <button type="reset" class="btn">@Messages("cancel.button.label")</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
     

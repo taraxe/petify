@@ -4,6 +4,8 @@ import play.api.libs.json._
 import com.mongodb.casbah.Imports._
 import db.db.Mongo
 import play.api.libs.json
+import play.Logger
+import com.mongodb.casbah.Imports
 
 
 /**
@@ -16,10 +18,16 @@ import play.api.libs.json
 
 
    case class Signer(email:String, code:String, firstName:Option[String] = None, lastName:Option[String] = None , age:Option[Int] = None, city:Option[String] = None) {
-      override def toString():String = {
+      def format():String = {
          Some(firstName,lastName,city).map{ u =>
-            u._1.map(f => f.head.toUpper + f.tail.toLowerCase) + " " + u._2.map(_.head.toUpper + ".")+ " "+ u._3.map(" "+_.head.toUpper)
+            u._1.map(f => f.head.toUpper + f.tail.toLowerCase).get + " " + u._2.map(_.head.toUpper + ".").get+ " "+ u._3.map(c => c.head.toUpper+c.tail).getOrElse("")
          }.getOrElse("")
+      }
+
+
+
+      def update():Signer = {
+         Signer.update(this).get
       }
    }
    object Signer extends Mongo("signers"){
@@ -44,6 +52,29 @@ import play.api.libs.json
             email <- r.getAs[String]("email")
             code <- r.getAs[String]("code")
          } yield(Signer(email, code))).orElse(None)
+      }
+
+      def byEmail(email:String):Option[Signer] = {
+         val result = selectOne(MongoDBObject("email" -> email))
+         (for {
+            r <- result
+            email <- r.getAs[String]("email")
+            code <- r.getAs[String]("code")
+         } yield(Signer(email, code))).orElse(None)
+      }
+
+
+      def update(signer:Signer):Option[Signer] = {
+         val mongoSigner = MongoDBObject.newBuilder
+         mongoSigner += "code" -> signer.code
+         signer.firstName.map( x => mongoSigner += "firstName" -> x)
+         signer.lastName.map( x => mongoSigner += "lastName" -> x)
+         signer.city.map( x => mongoSigner += "city" -> x)
+         signer.age.map( x => mongoSigner += "age" -> x)
+
+         update(MongoDBObject("email" -> signer.email), mongoSigner.result)
+               .map(s => Some(signer))
+               .getOrElse(None)
       }
       implicit object SignerFormat extends Format[Signer] {
          def reads(json: JsValue) = Signer(

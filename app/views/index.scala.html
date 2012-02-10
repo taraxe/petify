@@ -5,22 +5,33 @@
 
 @main(app.configuration.getString("application.name").get) {
 
-<div class="sign">
-    <form id="sign-form" action="@routes.Application.sign()" method="POST">
-
+<div class="hero-unit">
+    <h1>@Messages("home.tagline")</h1>
+    <p>@Messages("home.description")</p>
+</div>
+<div class="row">
+    <div class="span10 offset3"
+    <br/>
+    <form id="sign-form" class="form-search" action="@routes.Application.sign()" method="POST">
         @petitionForm.forField("email"){ field =>
-        <label for="email">@Messages("email.label")</label>
-        <input id="email" type="text" name="@field.name" value="@field.value">
-            @field.error.map { error =>
-                <p class="error">
-                    @error
-                </p>
-            }
+            <div class="controls">
+                <div class="input-prepend">
+                    <span class="add-on"><i class="icon-envelope"></i></span>
+
+                    <input id="email" type="text" placeholder="@field.name" class="input-xlarge" name="@field.name" value="@field.value">
+                    <button id="sign-button" class="btn btn-primary" type="submit">@Messages("sign.button.label")</button>
+                    <p class="help-block">@Messages("email.help")</p>
+                    @field.error.map { error =>
+                    <p class="error">
+                        @error
+                    </p>
+                    }
+
+                </div>
+            </div>
         }
-        <button id="sign-button" type="submit">@Messages("sign.button.label")</button>
+
     </form>
 </div>
-
-@signers()
 
 }

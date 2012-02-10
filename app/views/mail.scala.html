@@ -1,6 +1,16 @@
-@(signer:models.Signer)
+@(signer:models.Signer)(implicit app:play.api.Application)
 
 
 @import play.api.i18n._
+
+@main(app.configuration.getString("application.name").get) {
+
+<div class="hero-unit">
+    <h1>@Messages("mail.tagline")</h1>
+    <p>@Messages("mail.description")</p>
+    <a href="@{app.configuration.getString("base.url").get + routes.Application.confirm(signer.code).url}"></a>
+</div>
+
+}
 
 

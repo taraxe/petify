@@ -14,7 +14,8 @@ import play.api.libs.concurrent._
 import akka.util.duration._
 
 object Application extends Controller {
-  
+  val TOKEN_KEY = "token"
+
   def index = Action {
     import play.api.Play.current
     Ok(views.html.index(petitionForm))
@@ -27,8 +28,10 @@ object Application extends Controller {
        email => {
           val signer: Signer = Signer(email, UUID.randomUUID().toString)
           Signer.create(signer)
-          Logger.debug(signer.code)
-          Redirect(routes.Application.share())
+          val confirmURL: String = "http://" + request.host + routes.Application.confirm(signer.code).url
+          Logger.debug(confirmURL)
+          //Logger.debug(toEmail(signer))
+          Redirect(routes.Application.share()).withSession(TOKEN_KEY->signer.code)
        }
     )
   }
@@ -44,8 +47,14 @@ object Application extends Controller {
 
   def share() = Action { implicit request =>
    import play.api.Play.current
-   Ok(views.html.share())
-  } 
+   request.session.get(TOKEN_KEY).toRight(Redirect(routes.Application.index()))
+                                  .right
+                                  .map(s =>{
+                                     //val confirmURL: String = "http://" + request.host + routes.Application.confirm(s).url
+                                     Ok(views.html.share())
+                                  })
+                                  .fold(identity,identity)
+                             }
    
   def confirm(code: String) = Action { implicit request =>
      import play.api.Play.current
@@ -60,9 +69,9 @@ object Application extends Controller {
          formWithErrors => BadRequest(views.html.confirm(formWithErrors, code)),
          signer => {
             //todo update the signer
-
+            signer.update()
             SignatureWorker.ref ! signer
-            Logger.debug(signer.code)
+            Logger.debug("New signature : " + signer.format)
             Redirect(routes.Application.share())
          }
      )
@@ -85,7 +94,8 @@ object Application extends Controller {
      optional(mapping) verifying ("This field is required", _.isDefined)
   }
 
-  def sendEmail(signer:Signer) = {
-      views.html.mail(signer).text
+  def toEmail(signer:Signer) = {
+     import play.api.Play.current
+     views.html.mail(signer).toString
   }
 }
